@@ -1,0 +1,9 @@
+package-lock.json
+auth.json
+tsconfig.tsbuildinfo
+gcloud.json
+node_modules
+config.json
+*.mp3
+token.txt
+sounds
