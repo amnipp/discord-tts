@@ -25,9 +25,12 @@ const { OpusEncoder } = require('@discordjs/opus');
 const textToSpeech = require('@google-cloud/text-to-speech');
 // Creates a client
 const ttsClient = new textToSpeech.TextToSpeechClient({ keyFilename: 'gcloud.json' });
+const http = require('http'); // or 'https' for https:// URLs
+
+const https = require('https');
 const fs = require('fs');
+
 const util = require('util');
-const { boolean } = require('webidl-conversions');
 
 async function tts(message) {
 	console.log('TTS for ' + message);
@@ -56,6 +59,27 @@ async function tts(message) {
 	// console.log('deleted file');z
 	return entersState(player, AudioPlayerStatus.Playing, 5e3);
 }
+
+async function memeTTS(message) {
+	console.log('Meme TTS: ' + message);
+	// https://api.streamelements.com/kappa/v2/speech?voice=Brian&text=
+	const file = fs.createWriteStream('outputFileMeme.mp3');
+	https.get('https://api.streamelements.com/kappa/v2/speech?voice=Brian&text=' + message, function(response) {
+		response.pipe(file).on('close', () => {
+			const resource = createAudioResource('outputFileMeme.mp3', {
+				inputType: StreamType.Arbitrary,
+			});
+			player.play(resource);
+		});
+		//file.end();
+
+	});
+
+	// fs.unlinkSync('outputFile.mp3');
+	// console.log('deleted file');z
+	return entersState(player, AudioPlayerStatus.Playing, 5e3);
+}
+
 
 /* async function quickStart() {
 	// The text to synthesize
@@ -86,14 +110,31 @@ const userList = [
 
 function playSong() {
 	const resource = createAudioResource('sounds/sus.mp3', {
-		inputType: StreamType.Arbitrary,
+		inputType: StreamType.Arbitrary, inlineVolume: true,
 	});
-
+	resource.volume.setVolume(0.25);
 	player.play(resource);
 
 	return entersState(player, AudioPlayerStatus.Playing, 5e3);
 }
+function playHomu() {
+	const resource = createAudioResource('sounds/homu.mp3', {
+		inputType: StreamType.Arbitrary, inlineVolume: true,
+	});
+	resource.volume.setVolume(0.25);
+	player.play(resource);
 
+	return entersState(player, AudioPlayerStatus.Playing, 5e3);
+}
+function playQuack() {
+	const resource = createAudioResource('sounds/quack.mp3', {
+		inputType: StreamType.Arbitrary, inlineVolume: true,
+	});
+	resource.volume.setVolume(0.25);
+	player.play(resource);
+
+	return entersState(player, AudioPlayerStatus.Playing, 5e3);
+}
 async function connectToChannel(channel) {
 	const connection = joinVoiceChannel({
 		channelId: channel.id,
@@ -198,11 +239,20 @@ client.on('messageCreate', async (message) => {
 		ignoreFlag = false;
 		message.reply('Enabled TTS');
 	}
-	else if (message.content === '-sus') {
+	else if (message.content === '-sus' || message.content.includes('<:TeriVent:950923367735779348>')) {
 		playSong();
 	}
 	else if (message.content.includes('-tts')) {
 		tts(message.content.substring(4));
+	}
+	else if (message.content.includes('-memeTTS')) {
+		memeTTS(message.content.substring(8));
+	}
+	else if (message.content.includes('-homu')) {
+		playHomu();
+	}
+	else if (message.content.includes('-quack')) {
+		playQuack();
 	}
 	else if (userList.includes(message.author.id) && ignoreFlag === false) {
 		tts(message.content);
