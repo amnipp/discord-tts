@@ -59,7 +59,25 @@ async function tts(message) {
 	// console.log('deleted file');z
 	return entersState(player, AudioPlayerStatus.Playing, 5e3);
 }
+async function fMemeTTS(message) {
+	console.log('Meme TTS: ' + message);
+	// https://api.streamelements.com/kappa/v2/speech?voice=Brian&text=
+	const file = fs.createWriteStream('outputFileMeme.mp3');
+	https.get('https://api.streamelements.com/kappa/v2/speech?voice=Amy&text=' + message, function(response) {
+		response.pipe(file).on('close', () => {
+			const resource = createAudioResource('outputFileMeme.mp3', {
+				inputType: StreamType.Arbitrary,
+			});
+			player.play(resource);
+		});
+		//file.end();
 
+	});
+
+	// fs.unlinkSync('outputFile.mp3');
+	// console.log('deleted file');z
+	return entersState(player, AudioPlayerStatus.Playing, 5e3);
+}
 async function memeTTS(message) {
 	console.log('Meme TTS: ' + message);
 	// https://api.streamelements.com/kappa/v2/speech?voice=Brian&text=
@@ -247,6 +265,9 @@ client.on('messageCreate', async (message) => {
 	}
 	else if (message.content.includes('-memeTTS')) {
 		memeTTS(message.content.substring(8));
+	}
+	else if (message.content.includes('-fMeme')) {
+		fMemeTTS(message.content.substring(6));
 	}
 	else if (message.content.includes('-homu')) {
 		playHomu();
