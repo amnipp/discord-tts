@@ -19,13 +19,14 @@ const {
 	AudioPlayerStatus,
 	VoiceConnectionStatus,
 } = require('@discordjs/voice');
-const { OpusEncoder } = require('@discordjs/opus');
+
+// const { OpusEncoder } = require('@discordjs/opus');
 
 // Imports the Google Cloud client library
 const textToSpeech = require('@google-cloud/text-to-speech');
 // Creates a client
 const ttsClient = new textToSpeech.TextToSpeechClient({ keyFilename: 'gcloud.json' });
-const http = require('http'); // or 'https' for https:// URLs
+// const http = require('http'); // or 'https' for https:// URLs
 
 const https = require('https');
 const fs = require('fs');
@@ -70,7 +71,7 @@ async function fMemeTTS(message) {
 			});
 			player.play(resource);
 		});
-		//file.end();
+		// file.end();
 
 	});
 
@@ -89,7 +90,7 @@ async function memeTTS(message) {
 			});
 			player.play(resource);
 		});
-		//file.end();
+		// file.end();
 
 	});
 
@@ -173,7 +174,7 @@ async function connectToChannel(channel) {
 client.once('ready', async () => {
 	console.log('Ready!');
 	try {
-		//await playSong();
+		// await playSong();
 		console.log('Song is ready to play!');
 	}
 	catch (error) {

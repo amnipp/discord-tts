@@ -1,3 +1,7 @@
+Proof of concept that reads messages from specific members then does TTS in voice chat. Added fun memes too.
+
+Will need a complete rewrite using actual OOP concepts and proper command parsing. 
+
 https://cloud.google.com/text-to-speech/docs/before-you-begin
 
 https://cloud.google.com/text-to-speech/docs/libraries
