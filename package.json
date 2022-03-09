@@ -5,6 +5,8 @@
   "main": "index.js",
   "dependencies": {
     "@discordjs/builders": "^0.12.0",
+    "@discordjs/node-pre-gyp": "^0.4.2",
+    "@discordjs/opus": "^0.5.3",
     "@discordjs/rest": "^0.3.0",
     "@discordjs/voice": "^0.8.0",
     "@google-cloud/text-to-speech": "^3.4.0",
