@@ -2,7 +2,7 @@ class User {
     userName: string;
     userID: string;
     customPrefix: string;
-    ttsBotPreference: string;
+    ttsBotPreference: boolean;
     constructor(userName, userID, customPrefix, ttsBotPreference)
     {
         this.userName = userName;
