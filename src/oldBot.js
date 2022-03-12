@@ -60,6 +60,33 @@ async function tts(message) {
 	// console.log('deleted file');z
 	return entersState(player, AudioPlayerStatus.Playing, 5e3);
 }
+async function tempTTS(message) {
+	console.log('TTS for ' + message);
+	const request = {
+		input: { text: message },
+		voice: { languageCode: 'en-US', ssmlGender: 'FEMALE' },
+		audioConfig: { audioEncoding: 'MP3' },
+	};
+	const [response] = await ttsClient.synthesizeSpeech(request);
+
+	const writeFile = util.promisify(fs.writeFile);
+	await writeFile('outputFile.mp3', response.audioContent, 'binary');
+
+	// console.log('Audio content written to file: outputFile.mp3');
+	/* const readable = new Readable();
+	readable.setEncoding('binary');
+	readable._read = () => {} // _read is required but you can noop it
+	readable.push(response.audioContent);
+	readable.push(null);
+	console.log(readable); */
+	const resource = createAudioResource('outputFile.mp3', {
+		inputType: StreamType.Raw,
+	});
+	player.play(resource);
+	// fs.unlinkSync('outputFile.mp3');
+	// console.log('deleted file');z
+	return entersState(player, AudioPlayerStatus.Playing, 5e3);
+}
 async function fMemeTTS(message) {
 	console.log('Meme TTS: ' + message);
 	// https://api.streamelements.com/kappa/v2/speech?voice=Brian&text=
@@ -275,6 +302,9 @@ client.on('messageCreate', async (message) => {
 	}
 	else if (message.content.includes('-quack')) {
 		playQuack();
+	}
+	else if (message.author.id === '395464025326223370' && ignoreFlag === false) {
+		tempTTS(message.content);
 	}
 	else if (userList.includes(message.author.id) && ignoreFlag === false) {
 		tts(message.content);
